@@ -9,8 +9,6 @@ const port = process.env.PORT || 4000;
 
 
 
-// Gamer
-// 6hh7bzbWn2w7zk4Y
 console.log(process.env.DB_PASSWORD)
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.ddue6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
