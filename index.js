@@ -1,7 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-require('dotenv').config();
 const port = process.env.PORT || 4000;
 
 const app = express();
@@ -28,13 +28,13 @@ const watchlistCollection = database.collection('watchlist');
 // Connect to MongoDB
 async function run() {
     try {
-        await client.connect();
-        await client.db("admin").command({ ping: 1 });
-        console.log("Successfully connected to MongoDB!");
+       // await client.connect();
+       // await client.db("admin").command({ ping: 1 });
+       // console.log("Successfully connected to MongoDB!");
 
         // Review routes
         app.get('/reviews', async (req, res) => {
-            try {
+            try {;
                 const { email } = req.query;
                 const query = email ? { email } : {};
                 const reviews = await reviewCollection.find(query).toArray();
@@ -58,13 +58,16 @@ async function run() {
         app.post('/reviews', async (req, res) => {
             try {
                 const newReview = req.body;
-                if (!newReview.email || !newReview.gameTitle || !newReview.reviewDescription || !newReview.rating || !newReview.publishingYear || !newReview.genre) {
+                console.log(req.body)
+                if (!newReview.userEmail || !newReview.gameTitle || !newReview.reviewDescription || !newReview.rating || !newReview.publishingYear || !newReview.genre) {
                     return res.status(400).json({ message: 'All fields are required' });
                 }
                 newReview.timestamp = new Date();
                 const result = await reviewCollection.insertOne(newReview);
+                console.log(result)
                 res.status(201).json(result);
             } catch (error) {
+                console.log(error.message)
                 res.status(500).json({ message: 'Failed to add review', error: error.message });
             }
         });
@@ -138,7 +141,7 @@ async function run() {
         });
 
     } finally {
-        // Graceful cleanup if necessary
+        // cleanup if necessary
     }
 }
 
